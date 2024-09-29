@@ -1,0 +1,38 @@
+.calculator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(34, 34, 34);
+    padding: 2rem;
+    border-radius: 7%;
+  }
+  
+  .display {
+    margin-bottom: 3rem;
+    width: 220px;
+    height: 50px;
+    padding: 5px;
+    font-size: 40px;
+    text-align: right;
+    border-radius: 5%;
+  }
+  
+  .keypad {
+    display: grid;
+    grid-template-columns: repeat(4, 60px);
+    grid-gap: 0.5rem;
+  }
+  
+  button {
+    width: 60px;
+    height: 60px;
+    font-size: 18px;
+    border-radius: 15%;
+  }
+
+  .enterButton {
+      width: 129px;
+      background-color: rgb(201, 31, 31);
+      border-radius: 10%;
+  }
