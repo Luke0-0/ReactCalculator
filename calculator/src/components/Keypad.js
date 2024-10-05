@@ -15,7 +15,7 @@ handleClick = (value) => {
         <button onClick={() => this.handleClick(7)}>7</button>
         <button onClick={() => this.handleClick(8)}>8</button>
         <button onClick={() => this.handleClick(9)}>9</button>
-        <button onClick={() => this.handleClick("X")}>X</button>
+        <button onClick={() => this.handleClick("*")}>x</button>
         <button onClick={() => this.handleClick(4)}>4</button>
         <button onClick={() => this.handleClick(5)}>5</button>
         <button onClick={() => this.handleClick(6)}>6</button>
@@ -26,7 +26,7 @@ handleClick = (value) => {
         <button onClick={() => this.handleClick("+")}>+</button>
         <button onClick={() => this.handleClick(0)}>0</button>
         <button onClick={() => this.handleClick(".")}>.</button>
-        <button className = "enterButton" onClick={() => this.handleClick("Enter")}>Enter</button>
+        <button className = "enterButton" onClick={() => this.handleClick("=")}>Enter</button>
       </div>
     );
   }
