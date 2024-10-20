@@ -13,7 +13,7 @@ class Calculator extends React.Component {
     symbols: ["+", "-", "*", "/"],
   };
 
-  calculateEquation = (equation) => {
+  calculateEquation = (equation, symbol="") => {
     if (equation !== "") {
   
       const operators = ["+", "-", "*", "/"];
@@ -43,10 +43,14 @@ class Calculator extends React.Component {
   
           this.setState({
             prevDisplayValue: result.toString(),
-            displayValue: result.toString(), // perform calculation
+            displayValue: result.toString() + symbol, // perform calculation
             equation: "",
-            equalsFlag: true,
           });
+          if (symbol==="") {
+            this.setState({
+              equalsFlag: true,
+            });
+          }
           break; // exit loop once the calculation is done
         }
       }
@@ -56,6 +60,15 @@ class Calculator extends React.Component {
   handleClick = (value) => {
     // Handle division
     if (this.state.operation === "divide") {
+      // Check if the last value entered was an operation, if so, change the current operation to that operation
+      if (this.state.symbols.some(symbol => (this.state.displayValue.toString().charAt(this.state.displayValue.toString().length-1)===symbol))) {
+        this.setState((prevState) => ({
+            displayValue: this.state.prevDisplayValue + value.toString(), // Reset display value for the next number
+            prevDisplayValue: prevState.displayValue,
+            operation: "subtract", // Set the current operation to subtraction
+            equalsFlag: false,
+          }));
+      }
       this.setState ({
         displayValue: this.state.prevDisplayValue.toString() + "/",
         equation: this.state.displayValue + value.toString(),
@@ -95,7 +108,8 @@ class Calculator extends React.Component {
       if (value === "C") {
         this.setState ({
           displayValue: "",
-          prevDisplayValue: ""
+          prevDisplayValue: "",
+          equalsFlag: false,
         });
         return;
       }
@@ -109,6 +123,7 @@ class Calculator extends React.Component {
           this.setState((prevState) => ({
             displayValue: prevState.displayValue * -1,
             prevDisplayValue: prevState.displayValue, // Update prevDisplayValue
+            equalsFlag: false,
           }))
         }
         return;
@@ -119,6 +134,7 @@ class Calculator extends React.Component {
         this.setState((prevState) => ({
           displayValue: prevState.displayValue/100,
           prevDisplayValue: prevState.displayValue, // Update prevDisplayValue
+          equalsFlag: false,
         }));
         return;
       }
@@ -128,6 +144,7 @@ class Calculator extends React.Component {
           this.setState((prevState) => ({
             displayValue: prevState.displayValue.toString() + ".",
             prevDisplayValue: prevState.displayValue, // Update prevDisplayValue
+            equalsFlag: false,
           }));
         }
         return;
@@ -136,8 +153,8 @@ class Calculator extends React.Component {
       // Divde
       if (value === "/") {
         // check if an operation has already been entered. If so, perform a calculation
-        if (this.state.symbols.some(symbol => this.state.displayValue.includes(symbol))) {
-          this.calculateEquation(this.state.equation)
+        if (this.state.symbols.some(symbol => this.state.displayValue.toString().includes(symbol))) {
+          this.calculateEquation(this.state.equation, "/")
         }
         else {
           if (!((this.state.prevDisplayValue.toString()).includes("/"))){
@@ -145,6 +162,7 @@ class Calculator extends React.Component {
               prevDisplayValue: prevState.displayValue, // Store current value for division
               displayValue: this.state.prevDisplayValue + "/", // Reset display value for the next number
               operation: "divide", // Set the current operation to division
+              equalsFlag: false,
             }))
           }
         }
@@ -153,16 +171,18 @@ class Calculator extends React.Component {
 
       // Add
       if (value === "+") {
+        console.log("AddDisplayVal: " + this.state.displayValue)
         // check if an operation has already been entered. If so, perform a calculation
-        if (this.state.symbols.some(symbol => this.state.displayValue.includes(symbol))) {
-        this.calculateEquation(this.state.equation)
+        if (this.state.symbols.some(symbol => this.state.displayValue.toString().includes(symbol))) {
+        this.calculateEquation(this.state.equation, "+")
         }
         else {
           if (!((this.state.prevDisplayValue.toString()).includes("+"))){
             this.setState((prevState) => ({
               prevDisplayValue: prevState.displayValue, // Store current value 
-              displayValue: this.state.prevDisplayValue + "+", // Reset display value for the next number
+              displayValue: this.state.displayValue + "+", // Reset display value for the next number
               operation: "add", // Set the current operation to addition
+              equalsFlag: false,
             }));
           }
         }
@@ -172,8 +192,8 @@ class Calculator extends React.Component {
       // Multipy
       if (value === "*") {
         // check if an operation has already been entered. If so, perform a calculation
-        if (this.state.symbols.some(symbol => this.state.displayValue.includes(symbol))) {
-        this.calculateEquation(this.state.equation)
+        if (this.state.symbols.some(symbol => this.state.displayValue.toString().includes(symbol))) {
+        this.calculateEquation(this.state.equation, "*")
         }
         else {
           if (!((this.state.prevDisplayValue.toString()).includes("*"))){
@@ -181,6 +201,7 @@ class Calculator extends React.Component {
               prevDisplayValue: prevState.displayValue, // Store current value
               displayValue: this.state.prevDisplayValue + "*", // Reset display value for the next number
               operation: "multiply", // Set the current operation to multiplication
+              equalsFlag: false,
             }));
           }
         }
@@ -190,15 +211,16 @@ class Calculator extends React.Component {
       // Subtract
       if (value === "-") {
         // check if an operation has already been entered. If so, perform a calculation
-        if (this.state.symbols.some(symbol => this.state.displayValue.includes(symbol))) {
-        this.calculateEquation(this.state.equation)
+        if (this.state.symbols.some(symbol => (this.state.displayValue.toString().substring(1)).includes(symbol))) {
+          this.calculateEquation(this.state.equation, "-")
         }
         else {
-          if (!((this.state.prevDisplayValue.toString()).includes("-"))){
+          if (!((this.state.prevDisplayValue.toString().substring(1)).includes("-"))){
             this.setState((prevState) => ({
               prevDisplayValue: prevState.displayValue,
               displayValue: this.state.prevDisplayValue + "-", // Reset display value for the next number
               operation: "subtract", // Set the current operation to subtraction
+              equalsFlag: false,
             }));
           }
         }
@@ -215,8 +237,8 @@ class Calculator extends React.Component {
 
       // calculate
       else {
-        console.log("Equation: " + this.state.equation)
-        console.log("prevValue: " + this.state.prevDisplayValue)
+        console.log("EquationElse: " + this.state.equation)
+        console.log("prevValueElse: " + this.state.prevDisplayValue)
         if (Number(this.state.prevDisplayValue) === 0 || this.state.equalsFlag) {
           this.setState ({
             displayValue: value.toString(),
@@ -225,7 +247,7 @@ class Calculator extends React.Component {
           });
         }
         else {
-          if ((this.state.equation).includes("/") || (this.state.equation).includes("*") || this.state.equation.includes("+") || this.state.equation.includes("-")) {
+          if (this.state.symbols.some(symbol => this.state.displayValue.toString().includes(symbol))) {
             this.setState ({
               equation: this.state.displayValue + value
             });
