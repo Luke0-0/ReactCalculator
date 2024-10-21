@@ -6,6 +6,9 @@
     background-color: rgb(34, 34, 34);
     padding: 2rem;
     border-radius: 7%;
+    width: fit-content;
+    margin: auto;
+    box-shadow: 8px 8px 4px rgb(10, 96, 161);
   }
   
   .display {
@@ -35,4 +38,10 @@
       width: 129px;
       background-color: rgb(201, 31, 31);
       border-radius: 10%;
+  }
+
+  .title {
+    margin: auto;
+    color: rgb(237, 34, 34);
+    border: black, ;
   }

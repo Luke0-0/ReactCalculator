@@ -140,13 +140,11 @@ class Calculator extends React.Component {
       }
 
       if (value === ".") {
-        if (!((this.state.prevDisplayValue.toString()).includes("."))) {
-          this.setState((prevState) => ({
-            displayValue: prevState.displayValue.toString() + ".",
-            prevDisplayValue: prevState.displayValue, // Update prevDisplayValue
-            equalsFlag: false,
-          }));
-        }
+        this.setState((prevState) => ({
+          displayValue: prevState.displayValue.toString() + ".",
+          prevDisplayValue: prevState.displayValue, // Update prevDisplayValue
+          equalsFlag: false,
+        }));
         return;
       }
 
@@ -235,18 +233,16 @@ class Calculator extends React.Component {
         this.calculateEquation(this.state.equation)
       }
 
-      // calculate
+      // handle the input value if it is just an integer and not a special operation
       else {
-        console.log("EquationElse: " + this.state.equation)
-        console.log("prevValueElse: " + this.state.prevDisplayValue)
-        if (Number(this.state.prevDisplayValue) === 0 || this.state.equalsFlag) {
+        if ((Number(this.state.prevDisplayValue) === 0 && !this.state.displayValue.toString().includes(".")) || this.state.equalsFlag) { // check if previous value is 0, and if so delete the zero
           this.setState ({
             displayValue: value.toString(),
             prevDisplayValue: value.toString(), // Update prevDisplayValue
             equalsFlag: false,
           });
         }
-        else {
+        else { // if the previous input was an operation symbol, then handle accordingly
           if (this.state.symbols.some(symbol => this.state.displayValue.toString().includes(symbol))) {
             this.setState ({
               equation: this.state.displayValue + value
@@ -262,10 +258,22 @@ class Calculator extends React.Component {
   };
 
   render() {
+    const titleStyle = {
+      color: 'rgb(237, 34, 34)',
+      marginBottom: '2.5rem',
+      fontSize: "20px",
+      textShadow: '4px 4px 4px rgba(0, 0, 0, 0.5)'
+    }
     return (
-      <div className="calculator">
-        <Display value={this.state.displayValue} />
-        <Keypad onClick={this.handleClick} />
+      <div>
+        <div classname="title" style={titleStyle}>
+          <h1>Incredibly Original Calculator</h1>
+          </div>
+
+        <div className="calculator">
+          <Display value={this.state.displayValue} />
+          <Keypad onClick={this.handleClick} />
+        </div>
       </div>
     );
   }
